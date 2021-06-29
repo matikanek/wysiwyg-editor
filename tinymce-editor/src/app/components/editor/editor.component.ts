@@ -7,18 +7,22 @@ import { Component } from '@angular/core';
 })
 export class EditorComponent {
   activeField = null;
-  constructor() { }
 
   clickOnEditor(event: any){
     this.resetActive(event);
     this.setActive(event);
-    if(this.activeField == event.editor.getBody()){
+    this.clearActive(event);
+  }
+
+  clearActive(event: any): void {
+    if(this.activeField == event.editor.getBody()) {
       this.resetActive(event);
     }
   }
 
   resetActive(event: any): void {
-    if(this.activeField != null){
+    let element = this.activeField as any;
+    if(this.activeField != null && element.nodeName == 'TD'){
       event.editor.dom.setStyle(this.activeField, 'background-color', 'transparent');
       event.editor.dom.setStyle(this.activeField, 'border', '1px solid #ccc');
     }
@@ -28,12 +32,14 @@ export class EditorComponent {
     this.activeField = event.editor.selection.getNode();
     if(this.activeField != event.editor.getBody()){
       let element = this.activeField as any;
-      while(element.nodeName != 'TD') {
+      while(element.nodeName != 'TD' && element.nodeName != 'BODY') {
         this.activeField = element.parentNode;
         element = element.parentNode;
       }
-      event.editor.dom.setStyle(this.activeField, 'background-color', '#cce9ff');
-      event.editor.dom.setStyle(this.activeField, 'border', 'solid #5591cf');
+      if(element.nodeName == 'TD') {
+        event.editor.dom.setStyle(this.activeField, 'background-color', '#cce9ff');
+        event.editor.dom.setStyle(this.activeField, 'border', 'solid #5591cf');
+      }
     }
   }
 }
