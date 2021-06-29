@@ -1,0 +1,13 @@
+.editor__container {
+  display: flex;
+  justify-content: center;
+}
+
+.editor__container-structure-header {
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.editor__container-structure-active-item {
+  background-color: rgb(204, 233, 255);
+}
