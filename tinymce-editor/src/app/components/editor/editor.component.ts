@@ -1,14 +1,8 @@
 import { Component } from '@angular/core';
 import { ArrayDataSource } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
-
-interface FlatNode {
-  expandable: boolean;
-  name: string;
-  level: number;
-  isExpanded?: boolean;
-  isActive: boolean;
-}
+import { FlatNode } from 'src/app/models/tree-item.model';
+import { ActiveElement } from 'src/app/models/active-element.model';
 
 @Component({
   selector: 'app-editor',
@@ -18,6 +12,9 @@ interface FlatNode {
 export class EditorComponent {
   activeField = null;
   dataTree: FlatNode[] = []
+  activeElement: ActiveElement = {
+    font: '', size: '', weight: '', color: '', coords: {x: 0, y: 0}, width: 0, height: 0
+  };
   treeControl = new FlatTreeControl<FlatNode>(
     node => node.level, node => node.expandable);
   dataSource = new ArrayDataSource(this.dataTree);
@@ -125,6 +122,9 @@ export class EditorComponent {
 
   resetTree(): void {
     this.dataTree = [];
+    this.activeElement = {
+      font: '', size: '', weight: '', color: '', coords: {x: 0, y: 0}, width: 0, height: 0
+    };
   }
 
   resetActive(event: any): void {
@@ -137,6 +137,7 @@ export class EditorComponent {
 
   setActive(event: any): void {
     this.activeField = event.editor.selection.getNode();
+    this.funkcja(event);
     if(this.activeField != event.editor.getBody()){
       let element = this.activeField as any;
       while(element.nodeName != 'TD' && element.nodeName != 'BODY') {
@@ -147,6 +148,29 @@ export class EditorComponent {
         event.editor.dom.setStyle(this.activeField, 'background-color', '#cce9ff');
         event.editor.dom.setStyle(this.activeField, 'border', 'solid #5591cf');
       }
+    }
+  }
+
+  funkcja(event: any): void {
+    let activeElement = this.activeField as any;
+    let activeItem: ActiveElement = {
+      isImage: false, font: '', size: '', weight: '', color: '', coords: {x: 0, y: 0}, width: 0, height: 0
+    };
+    if(activeElement.nodeName != 'IMG') {
+      activeItem.isImage = false;
+      activeItem.font = window.getComputedStyle(event.editor.selection.getNode(), null).getPropertyValue('font-family');
+      activeItem.size = window.getComputedStyle(event.editor.selection.getNode(), null).getPropertyValue('font-size');
+      activeItem.weight = window.getComputedStyle(event.editor.selection.getNode(), null).getPropertyValue('font-weight');
+      activeItem.color = window.getComputedStyle(event.editor.selection.getNode(), null).getPropertyValue('color');
+      console.log(activeItem);
+    }
+    else {
+      activeItem.isImage = true;
+      activeItem.coords.x = Math.round(event.editor.selection.getBoundingClientRect().x);
+      activeItem.coords.y = Math.round(event.editor.selection.getBoundingClientRect().y);
+      activeItem.width = event.editor.selection.getBoundingClientRect().width;
+      activeItem.height = event.editor.selection.getBoundingClientRect().height;
+      console.log(activeItem);
     }
   }
 }

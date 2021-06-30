@@ -1,6 +1,6 @@
 <div class="editor__container">
   <div class="editor__container-structure">
-    <p class="editor__container-structure-header">
+    <p class="editor__container-header">
       Struktura:
     </p>
     <cdk-tree [dataSource]="dataSource" [treeControl]="treeControl">
@@ -63,4 +63,34 @@
         ]
       }"
   ></editor>
+  <div>
+    <div class="editor__container-properties">
+      <p class="editor__container-header">
+        Właściwości:
+      </p>
+      <div
+        *ngIf="activeElement.isImage==true"
+      >
+        <p>Coords:</p>
+        {{activeElement.coords.x}}
+        {{activeElement.coords.y}}
+        <p>Height:</p>
+        {{activeElement.height}}
+        <p>Width:</p>
+        {{activeElement.width}}
+      </div>
+      <div
+        *ngIf="activeElement.isImage==false"
+      >
+        <p>Font:</p>
+        {{activeElement.font}}
+        <p>Size:</p>
+        {{activeElement.size}}
+        <p>Weight:</p>
+        {{activeElement.weight}}
+        <p>Color:</p>
+        {{activeElement.color}}
+      </div>
+    </div>
+  </div>
 </div>
