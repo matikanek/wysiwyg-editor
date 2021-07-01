@@ -11,3 +11,9 @@
 .editor__container-structure-active-item {
   background-color: rgb(204, 233, 255);
 }
+
+.example-tree-node {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}

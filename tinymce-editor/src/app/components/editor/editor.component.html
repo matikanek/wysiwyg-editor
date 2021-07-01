@@ -8,6 +8,7 @@
       <cdk-tree-node *cdkTreeNodeDef="let node" cdkTreeNodePadding
         [style.display]="shouldRender(node) ? 'flex' : 'none'"
         class="example-tree-node"
+        (click)="clickOnTreeItem($event)"
       >
         <div
           *ngIf="node.isActive == true"
